@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Neon Shop ❄</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --neon-pink: #ff3cac;
+      --neon-blue: #2bd2ff;
+      --neon-purple: #8a2be2;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: black;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* ===== Snow Canvas ===== */
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ===== Header ===== */
+    header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glow 3s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px var(--neon-pink); }
+      to   { text-shadow: 0 0 25px var(--neon-blue); }
+    }
+
+    /* ===== Shop Grid ===== */
+    .shop {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      padding: 40px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #111, #222);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.4s, box-shadow 0.4s;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+
+    .card:hover {
+      transform: translateY(-15px) scale(1.05);
+      box-shadow:
+        0 0 25px var(--neon-pink),
+        0 0 50px var(--neon-blue);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      transition: transform 0.4s;
+    }
+
+    .card:hover img {
+      transform: scale(1.1);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      color: var(--neon-blue);
+    }
+
+    .price {
+      font-size: 1.2rem;
+      color: var(--neon-pink);
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 25px;
+      border-radius: 30px;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple));
+      color: white;
+      text-decoration: none;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px var(--neon-pink);
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 30px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="snow"></canvas>
+
+  <header>
+    <h1>❄ Neon Shop ❄</h1>
+    <p>Яркий магазин с анимациями</p>
+  </header>
+
+  <section class="shop">
+    <div class="card">
+      <img src="https://picsum.photos/400/300?1">
+      <h3>Товар 1</h3>
+      <div class="price">999 ₽</div>
+      <a href="#" class="btn">Купить</a>
+    </div>
+
+    <div class="card">
+      <img src="https://picsum.photos/400/300?2">
+      <h3>Товар 2</h3>
+      <div class="price">1499 ₽</div>
+      <a href="#" class="btn">Купить</a>
+    </div>
+
+    <div class="card">
+      <img src="https://picsum.photos/400/300?3">
+      <h3>Товар 3</h3>
+      <div class="price">1999 ₽</div>
+      <a href="#" class="btn">Купить</a>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 Neon Shop
+  </footer>
+
+  <script>
+    const canvas = document.getElementById("snow");
+    const ctx = canvas.getContext("2d");
+
+    let w, h;
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    const snowflakes = Array.from({ length: 150 }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 3 + 1,
+      s: Math.random() * 1 + 0.5
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "white";
+
+      snowflakes.forEach(f => {
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        f.y += f.s;
+        if (f.y > h) {
+          f.y = -5;
+          f.x = Math.random() * w;
+        }
+      });
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+
+</body>
+</html>
